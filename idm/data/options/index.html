@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Options Page</title>
+  </head>
+  <style type="text/css">
+  body {
+    min-width: 430px; /* to have the reset message fit the UI */
+    user-select: none;
+  }
+  input[type=text] {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  input[type=number] {
+    width: 80px;
+  }
+  </style>
+  <body>
+    <table width=100%>
+      <colgroup>
+        <col width="100px">
+        <col>
+      </colgroup>
+      <tr>
+        <td>Executable:</td>
+        <td><input type="text" id="executable"></td>
+      </tr>
+      <tr>
+        <td>Arguments:</td>
+        <td><input type="text" id="args"></td>
+      </tr>
+      <tr>
+        <td>Exception list for mime-types</td>
+        <td><input type="text" id="whitelist" placeholder="application/pdf, video/webm"></td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <label style="display: flex;">
+            <span style="flex: 1">Only download links with filesize greater than (in MB): </span>
+            <input type="number" id="size" min=0>
+          </label>
+        </td>
+      </tr>
+    </table>
+
+    <template id="tr-sample">
+      <tr>
+        <td><input type="checkbox"></td>
+        <td><label></label></td>
+      </tr>
+    </template>
+    <table width=100% id="table">
+      <colgroup>
+        <col width="24">
+        <col>
+      </colgroup>
+    </table>
+    <p>Advanced preferences:</p>
+    <ul>
+      <li><code>targetUrlPattern-media</code>: To limit appearance on image, video and audio context-menus (default value is <code>*://*/*</code>)</li>
+      <li><code>targetUrlPattern-link</code>: To limit appearance on link context-menu (default value is <code>*://*/*</code>)</li>
+    </ul>
+    <p style="white-space: nowrap; overflow: hidden;">
+      <input type="button" id="support" value="Support Developement">
+      <input type="button" id="reset" value="Reset">
+      &nbsp;&nbsp;&nbsp;
+      <input type="button" id="save" value="Save">
+      <span id="toast"></span>
+    </p>
+  </body>
+  <script src="/core/dom.js"></script>
+  <script src="/core/ui/options.js"></script>
+  <script src="/core/webext/utils/EventEmitter.js"></script>
+  <script src="/core/webext/core/base.js"></script>
+  <script src="/core/webext/core/chrome.storage.js"></script>
+  <script src="/core/webext/core/chrome.notifications.js"></script>
+  <script src="/config.js"></script>
+  <script src="index.js"></script>
+</html>
