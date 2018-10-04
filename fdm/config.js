@@ -3,17 +3,17 @@
 
 var config = {};
 
-config.tag = 'idm';
+config.tag = 'fdm';
 
 config.command = {
   executable: {
     Mac: 'open',
-    Win: '%ProgramFiles(x86)%\\Internet Download Manager\\IDMan.exe',
-    Lin: 'idm'
+    Win: '%ProgramFiles%\\FreeDownloadManager.ORG\\Free Download Manager\\fdm.exe',
+    Lin: 'fdm'
   },
   args: {
-    Mac: '-a "Internet Download Manager" "[URL]"',
-    Win: '/d "[URL]"',
+    Mac: '-a "Free Download Manager" "[URL]"',
+    Win: '"[URL]"',
     Lin: '"[URL]"'
   },
   get guess() {

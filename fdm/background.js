@@ -4,15 +4,8 @@
 var prefs = {
   enabled: false,
   whitelist: [],
-  include: [
-    '.3GP', '.7Z', '.AAC', '.ACE', '.AIF', '.ARJ', '.ASF', '.AVI', '.BIN', '.BZ2', '.EXE', '.GZ', '.GZIP',
-    '.IMG', '.ISO', '.LZH', '.M4A', '.M4V', '.MKV', '.MOV', '.MP3', '.MP4', '.MPA', '.MPE', '.MPEG', '.MPG', '.MSI',
-    '.MSU', '.OGG', '.OGV', '.PDF', '.PLJ', '.PPS', '.PPT', '.RAR', '.RMVB', '.SEA', '.SIT', '.SITX', '.TAR', '.TIF',
-    '.TIFF', '.WAV', '.WMA', '.WMV', '.ZIP'
-  ],
   range: false,
-  size: 0,
-  redirect: true
+  size: 0
 };
 webext.storage.on('changed', ps => Object.keys(ps).forEach(key => prefs[key] = ps[key].newValue));
 
@@ -44,17 +37,12 @@ observe.callback = d => {
       return;
     }
   }
-  if (prefs.include.length) {
-    if (!prefs.include.some(w => url.toLowerCase().indexOf(w.toLowerCase()) !== -1)) {
-      // console.log('skipped not in the "include" list');
-      return;
-    }
-  }
+
   download(d);
   return {
-    redirectUrl: prefs.redirect ? webext.runtime.getURL(
+    redirectUrl: webext.runtime.getURL(
       `/data/redirect/index.html?type=${type.value}&size=${size.value}&range=${range.value}&url=${url}`
-    ) : 'javascript:'
+    )
   };
 };
 observe.install = () => {

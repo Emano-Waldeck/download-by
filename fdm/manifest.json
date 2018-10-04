@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
   "version": "0.1.1",
-  "name": "Download by Internet Download Manager",
-  "description": "Optionally use Internet Download Manager instead of the built-in download manager to get large files",
+  "name": "Download by Free Download Manager",
+  "description": "Optionally use Free Download Manager instead of the built-in download manager to get large files",
 
   "icons": {
     "16": "data/icons/16.png",
@@ -65,7 +65,7 @@
   },
   "applications": {
     "gecko": {
-      "id": "{165e553c-8c91-4d66-8f47-1e60295562d3}",
+      "id": "{f58cf83a-497b-4f4b-a8ee-13d70fad1fe5}",
       "strict_min_version": "59.0"
     }
   }
