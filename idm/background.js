@@ -1,6 +1,8 @@
 /* globals webext, download */
 'use strict';
 
+var isFirefox = /Firefox/.test(navigator.userAgent);
+
 var prefs = {
   enabled: false,
   whitelist: [],
@@ -8,11 +10,12 @@ var prefs = {
     '.3GP', '.7Z', '.AAC', '.ACE', '.AIF', '.ARJ', '.ASF', '.AVI', '.BIN', '.BZ2', '.EXE', '.GZ', '.GZIP',
     '.IMG', '.ISO', '.LZH', '.M4A', '.M4V', '.MKV', '.MOV', '.MP3', '.MP4', '.MPA', '.MPE', '.MPEG', '.MPG', '.MSI',
     '.MSU', '.OGG', '.OGV', '.PDF', '.PLJ', '.PPS', '.PPT', '.RAR', '.RMVB', '.SEA', '.SIT', '.SITX', '.TAR', '.TIF',
-    '.TIFF', '.WAV', '.WMA', '.WMV', '.ZIP'
+    '.TIFF', '.WAV', '.WMA', '.WMV', '.ZIP', '.DEB', '.RPM', '.APPIMAGE'
   ],
   range: false,
   size: 0,
-  redirect: true
+  redirect: true,
+  passphrase: '' // the user can set a passphrase for external requests being rendered by this extension
 };
 webext.storage.on('changed', ps => Object.keys(ps).forEach(key => prefs[key] = ps[key].newValue));
 
@@ -51,10 +54,21 @@ observe.callback = d => {
     }
   }
   download(d);
-  return {
-    redirectUrl: prefs.redirect ? webext.runtime.getURL(
+  if (prefs.redirect) {
+    const redirectUrl = webext.runtime.getURL(
       `/data/redirect/index.html?type=${type.value}&size=${size.value}&range=${range.value}&url=${url}`
-    ) : 'javascript:'
+    );
+    if (isFirefox) {
+      window.setTimeout(() => chrome.tabs.update(d.tabId, {
+        url: redirectUrl
+      }), 0);
+    }
+    return {
+      redirectUrl
+    };
+  }
+  return {
+    redirectUrl: 'javascript:'
   };
 };
 observe.install = () => {
@@ -150,3 +164,20 @@ webext.contextMenus.on('clicked', ({srcUrl, pageUrl}) => download({
   url: srcUrl,
   referrer: pageUrl
 })).if(({menuItemId}) => menuItemId === 'download-media');
+
+// External application support
+chrome.runtime.onMessageExternal.addListener(request => {
+  if (request.method === 'download') {
+    if (prefs.passphrase && prefs.passphrase === request.passphrase) {
+      download({
+        url: request.url,
+        referrer: request.referrer
+      });
+    }
+    else {
+      webext.notifications.create({
+        message: 'To send download links to the external application, a passphrase needs to be set in the options page and all external requests must provide the exact same passphrase'
+      });
+    }
+  }
+});

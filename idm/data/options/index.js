@@ -35,6 +35,7 @@ build({
   const size = dom.$('size');
   const whitelist = dom.$('whitelist');
   const include = dom.$('include');
+  const passphrase = dom.$('passphrase');
 
   const load = async() => {
     const prefs = await webext.storage.get(Object.assign(config.command.guess, {
@@ -44,14 +45,16 @@ build({
         '.3GP', '.7Z', '.AAC', '.ACE', '.AIF', '.ARJ', '.ASF', '.AVI', '.BIN', '.BZ2', '.EXE', '.GZ', '.GZIP',
         '.IMG', '.ISO', '.LZH', '.M4A', '.M4V', '.MKV', '.MOV', '.MP3', '.MP4', '.MPA', '.MPE', '.MPEG', '.MPG', '.MSI',
         '.MSU', '.OGG', '.OGV', '.PDF', '.PLJ', '.PPS', '.PPT', '.RAR', '.RMVB', '.SEA', '.SIT', '.SITX', '.TAR', '.TIF',
-        '.TIFF', '.WAV', '.WMA', '.WMV', '.ZIP'
-      ]
+        '.TIFF', '.WAV', '.WMA', '.WMV', '.ZIP', '.DEB', '.RPM', '.APPIMAGE'
+      ],
+      passphrase: ''
     }));
     executable.value = prefs.executable;
     args.value = prefs.args;
     size.value = prefs.size;
     whitelist.value = prefs.whitelist.join(', ');
     include.value = prefs.include.join(', ');
+    passphrase.value = prefs.passphrase;
   };
 
   dom.saved = async() => {
@@ -60,7 +63,8 @@ build({
       args: args.value,
       size: Number(size.value),
       whitelist: whitelist.value.split(/\s*,\s*/).filter((s, i, l) => s && l.indexOf(s) === i),
-      include: include.value.split(/\s*,\s*/).filter((s, i, l) => s && l.indexOf(s) === i)
+      include: include.value.split(/\s*,\s*/).filter((s, i, l) => s && l.indexOf(s) === i),
+      passphrase: passphrase.value
     });
     load();
     toast.show('Options saved');

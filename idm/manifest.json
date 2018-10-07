@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "version": "0.1.1",
+  "version": "0.1.2",
   "name": "Download by Internet Download Manager",
   "description": "Optionally use Internet Download Manager instead of the built-in download manager to get large files",
 
